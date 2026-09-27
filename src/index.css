@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 2%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 62%;
+    --accent: 2 100% 44%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 2 100% 44%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 16%;
+    --input: 0 0% 18%;
+    --ring: 2 100% 44%;
+    --radius: 0.25rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #e10600;
+    color: #fff;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display uppercase;
+    font-weight: 400;
+  }
+
+  /* Minimal, premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #232323;
+    border: 3px solid #000;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e10600;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  /* Editorial eyebrow label: mono, letterspaced, tiny */
+  .eyebrow {
+    @apply font-mono text-[10px] uppercase tracking-wide2 text-white/50;
+  }
+
+  .rule {
+    @apply h-px w-full bg-white/10;
+  }
+
+  .nav-link {
+    @apply relative font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 transition-colors duration-300 hover:text-white;
+  }
+  .nav-link::after {
+    content: "";
+    @apply absolute -bottom-1.5 left-0 h-[2px] w-0 bg-red-batel transition-all duration-300;
+  }
+  .nav-link:hover::after,
+  .nav-link[data-active="true"]::after {
+    @apply w-full;
+  }
+  .nav-link[data-active="true"] {
+    @apply text-white;
+  }
+
+  /* Film-grain + vignette overlay used behind dark sections */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .hairline-grid {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 8.333% 100%;
+  }
+
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.34);
+    color: transparent;
+  }
+
+  .red-underline {
+    position: relative;
+  }
+  .red-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    height: 1px;
+    width: 100%;
+    background: #e10600;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .red-underline[data-on="true"]::after {
+    transform: scaleX(1);
+  }
+
+  /* Serial plate — the number is the loudest thing in the room */
+  .serial-plate {
+    @apply relative border border-white/12 bg-black/60 px-4 py-3 font-mono;
+  }
+
+  .marquee-mask {
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .will-change-transform-3d {
+    will-change: transform;
+  }
+}
+
+/* ---------------------------------------------------------------- loader */
+.elb-loader-bar {
+  position: relative;
+  overflow: hidden;
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.14);
+}
+.elb-loader-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #e10600;
+  transform-origin: left;
+  animation: elb-load 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes elb-load {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  70% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ i18n */
+
+/* Language swap is hidden behind a short fade so an RTL flip is never visible. */
+#root {
+  transition: opacity 0.2s ease;
+}
+html.lang-switching #root {
+  opacity: 0;
+}
+
+/* Arabic type stack: applied only while Arabic is active. */
+[data-lang="ar"] body,
+[data-lang="ar"] .font-sans {
+  font-family: "Cairo", "Inter", system-ui, -apple-system, sans-serif;
+}
+[data-lang="ar"] h1,
+[data-lang="ar"] h2,
+[data-lang="ar"] h3,
+[data-lang="ar"] .font-display {
+  font-family: "Cairo", "Anton", sans-serif;
+  font-weight: 800;
+}
+[data-lang="ar"] .font-mono,
+[data-lang="ar"] .eyebrow {
+  font-family: "Cairo", ui-monospace, monospace;
+  font-weight: 600;
+}
+
+/* Brand wordmark and numerals stay in the Latin type stack in every language. */
+.font-latin,
+[data-lang="ar"] .font-latin {
+  font-family: "Anton", "Arial Narrow", Impact, sans-serif;
+}
+.font-num,
+[data-lang="ar"] .font-num {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  letter-spacing: 0.08em;
+}
+
+/* Arabic script must not be letter-spaced — it breaks the letter joins. */
+[data-lang="ar"] :not(.font-latin):not(.font-latin *):not(.font-num):not(.font-num *) {
+  letter-spacing: 0 !important;
+}
+
+/* Mirrored bits of chrome that CSS alone cannot flip. */
+[dir="rtl"] .nav-link::after,
+[dir="rtl"] .red-underline::after {
+  left: auto;
+  right: 0;
+}
+[dir="rtl"] .marquee-mask {
+  mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
+}
+[dir="rtl"] .group:hover .group-hover\:translate-x-1 {
+  transform: translateX(-0.25rem);
+}
+.dir-icon {
+  display: inline-block;
+}
+[dir="rtl"] .dir-icon {
+  transform: scaleX(-1);
+}
+
+/* ------------------------------------------------------- language switcher */
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+}
+.lang-option {
+  position: relative;
+  padding: 0.25rem 0.1rem 0.35rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lang-option:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+.lang-option[data-active="true"] {
+  color: #fff;
+}
+.lang-option::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: #e10600;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[dir="rtl"] .lang-option::after {
+  transform-origin: right;
+}
+.lang-option[data-active="true"]::after {
+  transform: scaleX(1);
+}
